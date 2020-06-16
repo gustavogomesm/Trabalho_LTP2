@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import library.ConexaoUtil;;
+import library.ConexaoUtil;
 
 public class Produto {
 	private int id;
@@ -57,14 +57,14 @@ public class Produto {
 	public static class dados {
 
 	public void inserir(Produto Produto) {
-
+		
 		try {
 
-			Connection connection = ConexaoUtil.getConnection();
+			Connection con = ConexaoUtil.getConnection();
 
 			String sql = "INSERT INTO PRODUTO (NOME, VALOR, CATEGORIA, DESCRICAO) VALUES(?,?,?,?)";
 
-			PreparedStatement statement = connection.prepareStatement(sql);
+			PreparedStatement statement = con.prepareStatement(sql);
 
 			statement.setString(1, Produto.getNome());
 			statement.setFloat(2, Produto.getValor());
@@ -72,27 +72,27 @@ public class Produto {
 			statement.setString(4, Produto.getDescricao());
 
 			statement.execute();
-			connection.close();
+			con.close();
 			
 			System.out.println("Inserido com sucesso!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		
 	}
 
 	public void remover(int id) {
 		try {
 
-			Connection connection = ConexaoUtil.getConnection();
+			Connection con = ConexaoUtil.getConnection();
 
 			String sql = "DELETE FROM PRODUTO WHERE ID = ?";
-			PreparedStatement statement = connection.prepareStatement(sql);
+			PreparedStatement statement = con.prepareStatement(sql);
 
 			statement.setInt(1, id);
 
 			statement.execute();
-			connection.close();
+			con.close();
 			
 			System.out.println("Removido com sucesso!");
 		} catch (Exception e) {
@@ -104,11 +104,11 @@ public class Produto {
 	public List<Produto> listarTodos() {
 		List<Produto> listaProdutos = new ArrayList<Produto>();
 		try {
-			Connection connection = ConexaoUtil.getConnection();
+			Connection con = ConexaoUtil.getConnection();
 
 			String sql = "SELECT * FROM PRODUTO";
 
-			PreparedStatement statement = connection.prepareStatement(sql);
+			PreparedStatement statement = con.prepareStatement(sql);
 
 			ResultSet resultset = statement.executeQuery();
 
@@ -122,8 +122,8 @@ public class Produto {
 
 				listaProdutos.add(p);
 			}
-			connection.close();
-			System.out.println("Lista mostrada com sucesso!");
+			con.close();
+			System.out.println("Lista Exibida com sucesso!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -132,11 +132,11 @@ public class Produto {
 
 	public void atualizar(Produto produto) {
 		try {
-			Connection connection = ConexaoUtil.getConnection();
+			Connection con = ConexaoUtil.getConnection();
 
 			String sql = "UPDATE PRODUTO SET NOME = ?, VALOR = ?, CATEGORIA = ?, DESCRICAO = ? WHERE ID = ?";
 
-			PreparedStatement statement = connection.prepareStatement(sql);
+			PreparedStatement statement = con.prepareStatement(sql);
 
 			statement.setString(1, produto.getNome());
 			statement.setFloat(2, produto.getValor());
@@ -152,20 +152,6 @@ public class Produto {
 		}
 
 		return;
-	}
-
-		public static void main (String[] args) {
-			Produto p = new Produto();
-			
-			p.setNome("Arthur");
-			p.setValor(36);
-			p.setCategoria("Qualquer");
-			p.setDescricao("Nada");
-			
-			dados s = new dados();
-			
-			s.inserir(p);
-			
-			}
 		}
 	}
+}
