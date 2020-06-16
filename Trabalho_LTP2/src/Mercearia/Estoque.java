@@ -1,4 +1,4 @@
-package master_class;
+package Mercearia; 
 
 import library.Utils.conexaoUtil;
 import java.sql.Connection;
