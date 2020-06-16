@@ -1,10 +1,9 @@
-package Mercearia;
+package master_class;
 
+import library.Utils.conexaoUtil;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,9 +84,9 @@ public class Produto {
 
 			String sql = "DELETE FROM PRODUTO WHERE ID = ?";
 			PreparedStatement statement = connection.prepareStatement(sql);
-
+			
 			statement.setInt(1, id);
-
+			
 			statement.execute();
 			connection.close();
 		} catch (Exception e) {
@@ -95,42 +94,41 @@ public class Produto {
 		}
 
 	}
-
 	public List<Produto> listarTodos() {
 		List<Produto> listaProdutos = new ArrayList<Produto>();
 		try {
 			Connection connection = conexaoUtil.getInstance().getConnection();
-
+			
 			String sql = "SELECT * FROM PRODUTO";
-
+			
 			PreparedStatement statement = connection.prepareStatement(sql);
-
+			
 			ResultSet resultset = statement.executeQuery();
-
-			while (resultset.next()) {
+			
+			while(resultset.next()) {
 				Produto p = new Produto();
 				p.setId(resultset.getInt("ID"));
 				p.setNome(resultset.getString("NOME"));
 				p.setValor(resultset.getFloat("VALOR"));
 				p.setCategoria(resultset.getString("CATEGORIA"));
 				p.setDescricao(resultset.getString("DESCRICAO"));
-
+				
 				listaProdutos.add(p);
 			}
 			connection.close();
-
-		} catch (Exception e) {
+			
+		}catch (Exception e) {
 			e.printStackTrace();
 		}
 		return listaProdutos;
 	}
-
-	public void atualizar(Produto produto) {
+	
+	public void atualizar (Produto produto) {
 		try {
 			Connection connection = conexaoUtil.getInstance().getConnection();
-
+			
 			String sql = "UPDATE PRODUTO SET NOME = ?, VALOR = ?, CATEGORIA = ?, DESCRICAO = ? WHERE ID = ?";
-
+			
 			PreparedStatement statement = connection.prepareStatement(sql);
 
 			statement.setString(1, produto.getNome());
@@ -138,32 +136,12 @@ public class Produto {
 			statement.setString(3, produto.getCategoria());
 			statement.setString(4, produto.getDescricao());
 
-		} catch (Exception e) {
+			
+		}catch (Exception e){
 			e.printStackTrace();
 		}
-
+		
 		return;
 	}
 
-	public static class conexaoUtil {
-
-		private static conexaoUtil conexaoUtil;
-
-		public static conexaoUtil getInstance() {
-
-			if (conexaoUtil == null) {
-				conexaoUtil = new conexaoUtil();
-			}
-			return conexaoUtil;
-
-		}
-
-		public Connection getConnection() throws ClassNotFoundException, SQLException {
-
-			Class.forName("com.mysql.jdbc.Driver");
-
-			return DriverManager.getConnection("jdbc:mysql://localhost/AulaLTP2", "root", "root");
-
-		}
-	}
 }
