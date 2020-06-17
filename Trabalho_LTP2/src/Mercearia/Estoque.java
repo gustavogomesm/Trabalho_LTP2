@@ -2,6 +2,7 @@ package Mercearia;
 
 import Library.IO;
 import Library.estoqueModel;
+import Library.produtoModel;
 
 
 public class Estoque {
@@ -30,7 +31,7 @@ public static void  Menu_Estoque() {
 		  estoqueModel.listarTodos();
 	    break;
 	  case 2:
-	
+		  produtoModel.listarTodos();
 		  idproduto = IO.getInt("Digite o id do produto: ");
 		  quantidade = IO.getInt("Digite a qauntidade: ");;
 		   
