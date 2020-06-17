@@ -108,9 +108,13 @@ public class loginModel {
 			
 			Connection connection = conexao.getConnection();
 
-			String sql = "SELECT * FROM usuario where email = "+email+" and senha = "+senha+"";
+			String sql = "SELECT * FROM usuario where email = ? and senha = ?";
 
+			
 			PreparedStatement statement = connection.prepareStatement(sql);
+
+			statement.setString(1, email);
+			statement.setString(2, senha);
 
 			ResultSet resultset = statement.executeQuery();
 			System.out.println();
