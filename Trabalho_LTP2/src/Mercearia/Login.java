@@ -1,24 +1,24 @@
 package Mercearia;
 
 
+
+
 import Library.*;
 public class Login {
-
-public static void Pergunta_login() {
-	
-	
-	
-String user;
-String password;
-
 	
 
-user= IO.getString("Digite o Usuario");
-password= IO.getString("Digite a senha");
+public static void  Pergunta_login() {
+	
+	
 
+int id = IO.getInt("Digite o ID: ");
+String user = IO.getString("Digite seu login: ");
+String email = IO.getString("Digite seu email: ");;
+String password = IO.getString("Digite sua senha: ");;
 
-System.out.println("seu login ´: " + user);
-System.out.println("sua senha ´: " + password);
+loginModel.atualizar(id,user,email,password);
+ 
+
 
 }
 
