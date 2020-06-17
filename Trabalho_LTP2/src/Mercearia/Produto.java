@@ -1,157 +1,80 @@
-package Mercearia
+package Mercearia;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-import library.ConexaoUtil;
+
+
+import Library.IO;
+
+import Library.produtoModel;
+
 
 public class Produto {
-	private int id;
-	private String nome;
-	private float valor;
-	private String categoria;
-	private String descricao;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public float getValor() {
-		return valor;
-	}
-
-	public void setValor(float valor) {
-		this.valor = valor;
-	}
-
-	public String getCategoria() {
-		return categoria;
-	}
-
-	public void setCategoria(String categoria) {
-		this.categoria = categoria;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-	
-	public static class dados {
-
-	public void inserir(Produto Produto) {
+	public static void  Menu_Produto() {
 		
-		try {
-
-			Connection con = ConexaoUtil.getConnection();
-
-			String sql = "INSERT INTO PRODUTO (NOME, VALOR, CATEGORIA, DESCRICAO) VALUES(?,?,?,?)";
-
-			PreparedStatement statement = con.prepareStatement(sql);
-
-			statement.setString(1, Produto.getNome());
-			statement.setFloat(2, Produto.getValor());
-			statement.setString(3, Produto.getCategoria());
-			statement.setString(4, Produto.getDescricao());
-
-			statement.execute();
-			con.close();
-			
-			System.out.println("Inserido com sucesso!");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		int id;
+		String nome;
+		float Valor;
+ String Categoria;
+String Descricao;
 		
-	}
+		boolean fim = false;
+		System.out.println();
+		do {
 
-	public void remover(int id) {
-		try {
+			System.out.println(" ####   Menu do Produto   ####");
+			System.out.println("1 - Listar Produtos em Estoque");
+			System.out.println("2 - adicionar Produto");
+			System.out.println("3 - atualizar quantidade");
+			System.out.println("4 - Apagar Produtos do Estoque");
+			System.out.println("5 - Tela Inicial");
+		int opcao = IO.getInt("Selecione a opção desejada: ");
+		
+		switch(opcao) {
+		  case 1:
+			  produtoModel.listarTodos();
+		    break;
+		  case 2:
+		
+			  nome = IO.getString("Digite o nome do produto: ");
+			  Valor = IO.getFloat("Digite o valor do produto: ");;
+			  Categoria = IO.getString("Digite a categoria do produto: ");
+			  Descricao = IO.getString("Digite a descrição: ");;
 
-			Connection con = ConexaoUtil.getConnection();
+			  produtoModel.inserir( nome, Valor,  Categoria, Descricao);
+		    break;
+		  case 3:
+		//	  
+			  produtoModel.listarTodos();
+			  id = IO.getInt("Digite o id do produto: ");
+			  nome = IO.getString("Digite o nome do produto: ");
+			  Valor = IO.getFloat("Digite o valor do produto: ");;
+			  Categoria = IO.getString("Digite a categoria do produto: ");
+			  Descricao = IO.getString("Digite a descrição: ");;
 
-			String sql = "DELETE FROM PRODUTO WHERE ID = ?";
-			PreparedStatement statement = con.prepareStatement(sql);
+			  produtoModel.atualizar(id,nome, Valor,  Categoria, Descricao);
+			  break;
+		  case 4:
+			  produtoModel.listarTodos();
+			   id = IO.getInt("Digite o ID: ");
 
-			statement.setInt(1, id);
+			   produtoModel.remover(id);
+		    break;
+		  case 5:			  
 
-			statement.execute();
-			con.close();
-			
-			System.out.println("Removido com sucesso!");
-		} catch (Exception e) {
-			e.printStackTrace();
+			  System.out.println("5");
+			  fim = true;
+		    break;
+		  default:
+		    // code block
 		}
+		System.out.println("--------------");
+	}while(fim != true);
 
-	}
+		Main.logado();
+		
 
-	public List<Produto> listarTodos() {
-		List<Produto> listaProdutos = new ArrayList<Produto>();
-		try {
-			Connection con = ConexaoUtil.getConnection();
 
-			String sql = "SELECT * FROM PRODUTO";
+	 
 
-			PreparedStatement statement = con.prepareStatement(sql);
 
-			ResultSet resultset = statement.executeQuery();
-
-			while (resultset.next()) {
-				Produto p = new Produto();
-				p.setId(resultset.getInt("ID"));
-				p.setNome(resultset.getString("NOME"));
-				p.setValor(resultset.getFloat("VALOR"));
-				p.setCategoria(resultset.getString("CATEGORIA"));
-				p.setDescricao(resultset.getString("DESCRICAO"));
-
-				listaProdutos.add(p);
-			}
-			con.close();
-			System.out.println("Lista Exibida com sucesso!");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return listaProdutos;
-	}
-
-	public void atualizar(Produto produto) {
-		try {
-			Connection con = ConexaoUtil.getConnection();
-
-			String sql = "UPDATE PRODUTO SET NOME = ?, VALOR = ?, CATEGORIA = ?, DESCRICAO = ? WHERE ID = ?";
-
-			PreparedStatement statement = con.prepareStatement(sql);
-
-			statement.setString(1, produto.getNome());
-			statement.setFloat(2, produto.getValor());
-			statement.setString(3, produto.getCategoria());
-			statement.setString(4, produto.getDescricao());
-			
-			statement.execute();
-			statement.close();
-			
-			System.out.println("Atualizado com sucesso!");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return;
-		}
 	}
 }

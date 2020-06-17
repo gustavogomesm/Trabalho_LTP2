@@ -6,22 +6,23 @@ import java.sql.ResultSet;
 
 
 
+public class produtoModel {
 
+	
+	
 
-public class loginModel {
-
-	// Querys 
-	public static void inserir(String nome,String email, String senha)  {
+	public static void inserir(String nome,float Valor, String Categoria,String Descricao)  {
 
 		try {
 			Connection connection = conexao.getConnection();
-			String sql = "INSERT INTO usuario (nome,email,senha) VALUES(?,?,?)";
+			String sql = "INSERT INTO PRODUTO (NOME, VALOR, CATEGORIA, DESCRICAO) VALUES(?,?,?,?)";
 
 			PreparedStatement statement = connection.prepareStatement(sql);
-
 			statement.setString(1, nome);
-			statement.setString(2, email);
-			statement.setString(3, senha);
+			statement.setFloat(2,  Valor);
+			statement.setString(3, Categoria);
+			statement.setString(4, Descricao);
+
 			
 			statement.execute();
 			connection.close();
@@ -37,11 +38,11 @@ public class loginModel {
 
 			Connection connection = conexao.getConnection();
 
-			String sql = "DELETE FROM usuario WHERE ID = ?";
+			String sql = "DELETE FROM PRODUTO WHERE id = ?";
 			PreparedStatement statement = connection.prepareStatement(sql);
 			
 			statement.setInt(1, id);
-			
+			System.out.println("Removido com sucesso.");
 			statement.execute();
 			connection.close();
 		} catch (Exception e) {
@@ -58,7 +59,7 @@ public class loginModel {
 			
 			Connection connection = conexao.getConnection();
 
-			String sql = "SELECT * FROM usuario";
+			String sql = "SELECT * FROM PRODUTO";
 
 			PreparedStatement statement = connection.prepareStatement(sql);
 
@@ -67,7 +68,7 @@ public class loginModel {
 			System.out.println(" -------------------------------------");
 			System.out.println();
 			while (resultset.next()) {
-				System.out.println("ID: "+resultset.getInt("id") + " - Nome: " + resultset.getString("nome") + " Email: "+ resultset.getString("email"));
+				System.out.println("ID: "+resultset.getInt("id") + " - Produto: " + resultset.getString("nome")+ " - Valor: " + resultset.getFloat("valor") + " categoria: "+ resultset.getString("categoria")+ " Descrição: "+ resultset.getString("descricao"));
 			}
 			System.out.println();
 			System.out.println();
@@ -81,19 +82,22 @@ public class loginModel {
 	}
 	
 
-	public static void atualizar (int id,String nome,String email, String senha) {
+	public static void atualizar (int id,String nome,float Valor,  String Categoria,String Descricao) {
 		try {
 			Connection connection = conexao.getConnection();
-			String sql = "UPDATE usuario SET nome = ?, email = ?, senha = ? where  id = ?";
+			String sql = "UPDATE produto SET nome = ?, Categoria = ?, valor = ?, Descricao = ? where  id = ?";
 			
 			PreparedStatement statement = connection.prepareStatement(sql);
 
 			statement.setString(1, nome);
-			statement.setString(2, email);
-			statement.setString(3, senha);
-			statement.setInt(4, id);
+			statement.setFloat(2, Valor);
+			statement.setString(3, Categoria);
+			statement.setString(4, Descricao);
+			statement.setInt(5, id);
+
 			statement.execute();
 			connection.close();
+			
 			//System.out.println("");
 		}catch (Exception e){
 			e.printStackTrace();
@@ -102,40 +106,5 @@ public class loginModel {
 		return;
 	}
 	
-	public static Boolean VerificaLogin(String email,String senha) {
 		
-		try {
-			
-			Connection connection = conexao.getConnection();
-
-			String sql = "SELECT * FROM usuario where email = "+email+" and senha = "+senha+"";
-
-			PreparedStatement statement = connection.prepareStatement(sql);
-
-			ResultSet resultset = statement.executeQuery();
-			System.out.println();
-			System.out.println(" -------------------------------------");
-			System.out.println();
-			int i = 0;
-			while (resultset.next()) {	
-				i++;			
-			}
-			connection.close();
-			if(i>0) {
-				return true;
-			}else {
-				return false;
-			}
-			
-			
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	
-	
-	}
-	
-	}
-
+}

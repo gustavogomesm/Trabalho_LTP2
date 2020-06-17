@@ -11,7 +11,7 @@ public class conexao {
 			return DriverManager.getConnection("jdbc:mysql://localhost:3306/aulaltp2",
 	                "root", "");
 		}catch (ClassNotFoundException e) {
-			System.out.println("Não conectado");
+			System.err.println("Não conectado ao banco");
 			throw new SQLException(e.getMessage());
 		}
 	}
