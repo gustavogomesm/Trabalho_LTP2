@@ -1,12 +1,11 @@
-package Mercearia;
+package Mercearia
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import library.ConexaoUtil;
 
 public class Produto {
 	private int id;
@@ -54,16 +53,18 @@ public class Produto {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+	
+	public static class dados {
 
 	public void inserir(Produto Produto) {
-
+		
 		try {
 
-			Connection connection = conexaoUtil.getInstance().getConnection();
+			Connection con = ConexaoUtil.getConnection();
 
 			String sql = "INSERT INTO PRODUTO (NOME, VALOR, CATEGORIA, DESCRICAO) VALUES(?,?,?,?)";
 
-			PreparedStatement statement = connection.prepareStatement(sql);
+			PreparedStatement statement = con.prepareStatement(sql);
 
 			statement.setString(1, Produto.getNome());
 			statement.setFloat(2, Produto.getValor());
@@ -71,25 +72,29 @@ public class Produto {
 			statement.setString(4, Produto.getDescricao());
 
 			statement.execute();
-			connection.close();
+			con.close();
+			
+			System.out.println("Inserido com sucesso!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		
 	}
 
 	public void remover(int id) {
 		try {
 
-			Connection connection = conexaoUtil.getInstance().getConnection();
+			Connection con = ConexaoUtil.getConnection();
 
 			String sql = "DELETE FROM PRODUTO WHERE ID = ?";
-			PreparedStatement statement = connection.prepareStatement(sql);
+			PreparedStatement statement = con.prepareStatement(sql);
 
 			statement.setInt(1, id);
 
 			statement.execute();
-			connection.close();
+			con.close();
+			
+			System.out.println("Removido com sucesso!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -99,11 +104,11 @@ public class Produto {
 	public List<Produto> listarTodos() {
 		List<Produto> listaProdutos = new ArrayList<Produto>();
 		try {
-			Connection connection = conexaoUtil.getInstance().getConnection();
+			Connection con = ConexaoUtil.getConnection();
 
 			String sql = "SELECT * FROM PRODUTO";
 
-			PreparedStatement statement = connection.prepareStatement(sql);
+			PreparedStatement statement = con.prepareStatement(sql);
 
 			ResultSet resultset = statement.executeQuery();
 
@@ -117,8 +122,8 @@ public class Produto {
 
 				listaProdutos.add(p);
 			}
-			connection.close();
-
+			con.close();
+			System.out.println("Lista Exibida com sucesso!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -127,43 +132,26 @@ public class Produto {
 
 	public void atualizar(Produto produto) {
 		try {
-			Connection connection = conexaoUtil.getInstance().getConnection();
+			Connection con = ConexaoUtil.getConnection();
 
 			String sql = "UPDATE PRODUTO SET NOME = ?, VALOR = ?, CATEGORIA = ?, DESCRICAO = ? WHERE ID = ?";
 
-			PreparedStatement statement = connection.prepareStatement(sql);
+			PreparedStatement statement = con.prepareStatement(sql);
 
 			statement.setString(1, produto.getNome());
 			statement.setFloat(2, produto.getValor());
 			statement.setString(3, produto.getCategoria());
 			statement.setString(4, produto.getDescricao());
-
+			
+			statement.execute();
+			statement.close();
+			
+			System.out.println("Atualizado com sucesso!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return;
-	}
-
-	public static class conexaoUtil {
-
-		private static conexaoUtil conexaoUtil;
-
-		public static conexaoUtil getInstance() {
-
-			if (conexaoUtil == null) {
-				conexaoUtil = new conexaoUtil();
-			}
-			return conexaoUtil;
-
-		}
-
-		public Connection getConnection() throws ClassNotFoundException, SQLException {
-
-			Class.forName("com.mysql.jdbc.Driver");
-
-			return DriverManager.getConnection("jdbc:mysql://localhost/AulaLTP2", "root", "root");
-
 		}
 	}
 }
